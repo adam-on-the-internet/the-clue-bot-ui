@@ -1,3 +1,2 @@
-1. set up git
-2. set up github pages
-3. what if no current mystery?
+1. show stats
+2. update for 24 version

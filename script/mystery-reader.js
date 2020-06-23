@@ -8,26 +8,41 @@ function loadMysteries() {
 
 async function loadCurrentMystery() {
     const currentResponse = await fetch(currentUrl);
-    const currentMystery = await currentResponse.json();
-    displayCurrentMystery(currentMystery);
+    const responseText = await currentResponse.text();
+    if (responseText) {
+        const currentMystery = await currentResponse.json();
+        displayCurrentMystery(currentMystery);
+    } else {
+        displayNoCurrentMystery();
+    }
 }
 
 async function loadSolvedMysteries() {
     const solvedResponse = await fetch(solvedUrl);
     const solvedMysteries = await solvedResponse.json();
-    displaySolvedMysteries(solvedMysteries);
+    if (solvedMysteries.length > 0) {
+        displaySolvedMysteries(solvedMysteries);
+    } else {
+        displayNoSolvedMysteries();
+    }
 }
 
 function displayCurrentMystery(mystery) {
     document.getElementById("solved-mysteries").innerHTML = "<p>Loading...</p>";
-    const currentMystery = buildMysteryContent(mystery);
-    document.getElementById("current-mystery").innerHTML = currentMystery;
+    document.getElementById("current-mystery").innerHTML = buildMysteryContent(mystery);
+}
+
+function displayNoCurrentMystery() {
+    document.getElementById("current-mystery").innerHTML = "<p>No current mystery</p>";
+}
+
+function displayNoSolvedMysteries() {
+    document.getElementById("solved-mysteries").innerHTML = "<p>No solved mysteries</p>";
 }
 
 function displaySolvedMysteries(mysteries) {
     document.getElementById("solved-mysteries").innerHTML = "<p>Loading...</p>";
-    const solvedMysteries = buildMysteryContentForMultiple(mysteries);
-    document.getElementById("solved-mysteries").innerHTML = solvedMysteries;
+    document.getElementById("solved-mysteries").innerHTML = buildMysteryContentForMultiple(mysteries);
 }
 
 function buildMysteryContentForMultiple(mysteries) {
@@ -52,8 +67,9 @@ function buildMysteryContent(mystery) {
     ${statusContent}
     ${announcementsContent}
   `;
+    } else {
+        return ``;
     }
-    return "";
 }
 
 function buildStatusContent(mystery) {
@@ -66,9 +82,9 @@ function buildStatusContent(mystery) {
 
 function buildDateContent(mystery) {
     const d = new Date(mystery.dateStarted)
-    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-    const mo = new Intl.DateTimeFormat('en', { month: 'long' }).format(d)
-    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+    const ye = new Intl.DateTimeFormat('en', {year: 'numeric'}).format(d)
+    const mo = new Intl.DateTimeFormat('en', {month: 'long'}).format(d)
+    const da = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(d)
 
     return `<p>Murder Occurred on ${mo} ${da}, ${ye}</p>`;
 }
