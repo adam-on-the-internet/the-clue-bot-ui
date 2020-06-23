@@ -12,7 +12,7 @@ async function loadCurrentMystery() {
     const currentResponse = await fetch(baseClueBotUrl + currentCollection);
     const responseText = await currentResponse.text();
     if (responseText) {
-        const currentMystery = await currentResponse.json();
+        const currentMystery = await JSON.parse(responseText);
         displayCurrentMystery(currentMystery);
     } else {
         displayNoCurrentMystery();
@@ -111,7 +111,6 @@ function buildStatusContent(mystery) {
     } else {
         return `
             <p>The Mystery has not yet been solved.</p>
-            <p>${mystery.victim} was killed by ??? in the ??? with the ???.</p>
 `
     }
 }
