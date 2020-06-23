@@ -1,13 +1,15 @@
-const solvedUrl = `https://aoti-basic-express-app.herokuapp.com/clueBot`;
-const currentUrl = `https://aoti-basic-express-app.herokuapp.com/clueBot/current`;
+const baseClueBotUrl = `https://aoti-basic-express-app.herokuapp.com/clueBot`;
+const currentCollection = `/current`;
+const statsCollection = `/stats`;
 
 function loadMysteries() {
     loadCurrentMystery();
     loadSolvedMysteries();
+    loadStats();
 }
 
 async function loadCurrentMystery() {
-    const currentResponse = await fetch(currentUrl);
+    const currentResponse = await fetch(baseClueBotUrl + currentCollection);
     const responseText = await currentResponse.text();
     if (responseText) {
         const currentMystery = await currentResponse.json();
@@ -17,14 +19,25 @@ async function loadCurrentMystery() {
     }
 }
 
+async function loadStats() {
+    const statsResponse = await fetch(baseClueBotUrl + statsCollection);
+    const stats = await statsResponse.json();
+    displayStats(stats);
+}
+
 async function loadSolvedMysteries() {
-    const solvedResponse = await fetch(solvedUrl);
+    const solvedResponse = await fetch(baseClueBotUrl);
     const solvedMysteries = await solvedResponse.json();
     if (solvedMysteries.length > 0) {
         displaySolvedMysteries(solvedMysteries);
     } else {
         displayNoSolvedMysteries();
     }
+}
+
+function displayStats(stats) {
+    document.getElementById("mystery-stats").innerHTML = "<p>Loading...</p>";
+    document.getElementById("mystery-stats").innerHTML = buildStatsContent(stats);
 }
 
 function displayCurrentMystery(mystery) {
@@ -43,6 +56,26 @@ function displayNoSolvedMysteries() {
 function displaySolvedMysteries(mysteries) {
     document.getElementById("solved-mysteries").innerHTML = "<p>Loading...</p>";
     document.getElementById("solved-mysteries").innerHTML = buildMysteryContentForMultiple(mysteries);
+}
+
+function buildStatsContent(stats) {
+    const mysteryCountStats = `<p>${stats.solvedMysteryCount} mysteries solved</p>`;
+    const availableSuspects = `<p>${stats.suspectCount} suspects available</p>`;
+    const availableScenes = `<p>${stats.sceneCount} scenes available</p>`;
+    const weaponsAvailable = `<p>${stats.weaponCount} weapons available</p>`;
+    const murderWeaponOccurrences = "<h4>Murder Weapon Occurrences</h4>" + buildOccurrencesContent(stats.murderWeaponOccurrences);
+    const crimeSceneOccurrences = "<h4>Crime Scene Occurrences</h4>" + buildOccurrencesContent(stats.crimeSceneOccurrences);
+    const culpritOccurrences = "<h4>Culprit Occurrences</h4>" + buildOccurrencesContent(stats.culpritOccurrences);
+    const victimOccurrences = "<h4>Victim Occurrences</h4>" + buildOccurrencesContent(stats.victimOccurrences);
+    return mysteryCountStats + availableSuspects + availableScenes + weaponsAvailable + murderWeaponOccurrences + crimeSceneOccurrences + culpritOccurrences + victimOccurrences;
+}
+
+function buildOccurrencesContent(occurrences) {
+    let occurrencesList = `<ul>`;
+    occurrences.forEach((occurrence) => {
+        occurrencesList += `<li>${occurrence.name} (${occurrence.count})</li>`;
+    });
+    return occurrencesList + `</ul>`;
 }
 
 function buildMysteryContentForMultiple(mysteries) {
@@ -95,12 +128,4 @@ function buildAnnouncementsContent(mystery) {
         announcementsContent += `<li>${announcement}</li>`;
     });
     return announcementsContent + "</ul>";
-}
-
-function addAsset(asset) {
-    const tagContent = getAssetTagContent(asset);
-    const commentContent = getCommentContent(asset);
-    const fullPath = `${baseUrl}/assets${asset.src}`;
-    const assetContent = buildAssetContent(asset, fullPath, commentContent, tagContent);
-    document.getElementById("gallery").innerHTML += assetContent;
 }

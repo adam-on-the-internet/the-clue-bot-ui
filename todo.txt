@@ -1,2 +1,1 @@
-1. show stats
-2. update for 24 version
+1. update for 24 version
