@@ -36,12 +36,10 @@ async function loadSolvedMysteries() {
 }
 
 function displayStats(stats) {
-    document.getElementById("mystery-stats").innerHTML = "<p>Loading...</p>";
     document.getElementById("mystery-stats").innerHTML = buildStatsContent(stats);
 }
 
 function displayCurrentMystery(mystery) {
-    document.getElementById("solved-mysteries").innerHTML = "<p>Loading...</p>";
     document.getElementById("current-mystery").innerHTML = buildMysteryContent(mystery);
 }
 
@@ -54,7 +52,6 @@ function displayNoSolvedMysteries() {
 }
 
 function displaySolvedMysteries(mysteries) {
-    document.getElementById("solved-mysteries").innerHTML = "<p>Loading...</p>";
     document.getElementById("solved-mysteries").innerHTML = buildMysteryContentForMultiple(mysteries);
 }
 
