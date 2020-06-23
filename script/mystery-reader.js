@@ -107,9 +107,15 @@ function buildMysteryContent(mystery) {
 
 function buildStatusContent(mystery) {
     if (mystery.solved) {
-        return "<p>The Mystery has been solved!</p>";
+        return `
+            <p>The Mystery has been solved!</p>
+            <p>${mystery.victim} was killed by ${mystery.culprit} in the ${mystery.scene} with the ${mystery.weapon}.</p>
+`;
     } else {
-        return `<p>Chapter ${mystery.status}/21</p>`
+        return `
+            <p>The Mystery has not yet been solved.</p>
+            <p>${mystery.victim} was killed by ??? in the ??? with the ???.</p>
+`
     }
 }
 
