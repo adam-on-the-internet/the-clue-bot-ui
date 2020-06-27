@@ -68,11 +68,13 @@ function buildStatsContent(stats) {
 }
 
 function buildOccurrencesContent(occurrences) {
-    let occurrencesList = `<ul>`;
-    occurrences.forEach((occurrence) => {
-        occurrencesList += `<li>${occurrence.name} (${occurrence.count})</li>`;
+    let occurrencesList = `<ol>`;
+    occurrences.forEach((occurrence, index) => {
+        if (index <= 4) {
+            occurrencesList += `<li>${occurrence.name} (${occurrence.count})</li>`;
+        }
     });
-    return occurrencesList + `</ul>`;
+    return occurrencesList + `</ol>`;
 }
 
 function buildMysteryContentForMultiple(mysteries) {
