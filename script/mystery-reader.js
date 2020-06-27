@@ -121,7 +121,7 @@ function buildDateContent(mystery) {
     const mo = new Intl.DateTimeFormat('en', {month: 'long'}).format(d)
     const da = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(d)
 
-    return `<p>Murder Occurred on ${mo} ${da}, ${ye}</p>`;
+    return `<p>Mystery started on ${mo} ${da}, ${ye}</p>`;
 }
 
 function buildAnnouncementsContent(mystery) {
