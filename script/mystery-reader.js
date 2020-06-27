@@ -60,10 +60,10 @@ function buildStatsContent(stats) {
     const availableSuspects = `<p>${stats.suspectCount} suspects available</p>`;
     const availableScenes = `<p>${stats.sceneCount} scenes available</p>`;
     const weaponsAvailable = `<p>${stats.weaponCount} weapons available</p>`;
-    const murderWeaponOccurrences = "<h4>Murder Weapon Occurrences</h4>" + buildOccurrencesContent(stats.murderWeaponOccurrences);
-    const crimeSceneOccurrences = "<h4>Crime Scene Occurrences</h4>" + buildOccurrencesContent(stats.crimeSceneOccurrences);
-    const culpritOccurrences = "<h4>Culprit Occurrences</h4>" + buildOccurrencesContent(stats.culpritOccurrences);
-    const victimOccurrences = "<h4>Victim Occurrences</h4>" + buildOccurrencesContent(stats.victimOccurrences);
+    const murderWeaponOccurrences = "<h4>Top 5 Murder Weapon Occurrences</h4>" + buildOccurrencesContent(stats.murderWeaponOccurrences);
+    const crimeSceneOccurrences = "<h4>Top 5 Crime Scene Occurrences</h4>" + buildOccurrencesContent(stats.crimeSceneOccurrences);
+    const culpritOccurrences = "<h4>Top 5 Culprit Occurrences</h4>" + buildOccurrencesContent(stats.culpritOccurrences);
+    const victimOccurrences = "<h4>Top 5 Victim Occurrences</h4>" + buildOccurrencesContent(stats.victimOccurrences);
     return mysteryCountStats + availableSuspects + availableScenes + weaponsAvailable + murderWeaponOccurrences + crimeSceneOccurrences + culpritOccurrences + victimOccurrences;
 }
 
