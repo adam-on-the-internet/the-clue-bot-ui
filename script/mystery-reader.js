@@ -1,6 +1,8 @@
 const baseClueBotUrl = `https://aoti-basic-express-app.herokuapp.com/clueBot`;
 const currentCollection = `/current`;
 const statsCollection = `/stats`;
+const currentAccordionClass = "current-accordion";
+const solvedAccordionClass = "solved-accordion";
 
 function loadMysteries() {
     loadCurrentMystery();
@@ -40,7 +42,8 @@ function displayStats(stats) {
 }
 
 function displayCurrentMystery(mystery) {
-    document.getElementById("current-mystery").innerHTML = buildMysteryContent(mystery);
+    document.getElementById("current-mystery").innerHTML = buildMysteryContent(mystery, currentAccordionClass);
+    setupAccordions(currentAccordionClass);
 }
 
 function displayNoCurrentMystery() {
@@ -53,6 +56,7 @@ function displayNoSolvedMysteries() {
 
 function displaySolvedMysteries(mysteries) {
     document.getElementById("solved-mysteries").innerHTML = buildMysteryContentForMultiple(mysteries);
+    setupAccordions(solvedAccordionClass);
 }
 
 function buildStatsContent(stats) {
@@ -80,15 +84,15 @@ function buildOccurrencesContent(occurrences) {
 function buildMysteryContentForMultiple(mysteries) {
     let mysteryContent = "";
     mysteries.forEach((mystery) => {
-        const mysteryContentWithBreak = buildMysteryContent(mystery) + "<hr>";
+        const mysteryContentWithBreak = buildMysteryContent(mystery, solvedAccordionClass) + "<hr>";
         mysteryContent += mysteryContentWithBreak;
     });
     return mysteryContent;
 }
 
-function buildMysteryContent(mystery) {
+function buildMysteryContent(mystery, accordionClass) {
     if (mystery) {
-        const announcementsContent = buildAnnouncementsContent(mystery);
+        const announcementsContent = buildAnnouncementsContent(mystery, accordionClass);
         const statusContent = buildStatusContent(mystery);
         const dateContent = buildDateContent(mystery);
         return `
@@ -126,10 +130,18 @@ function buildDateContent(mystery) {
     return `<p>Mystery started on ${mo} ${da}, ${ye}</p>`;
 }
 
-function buildAnnouncementsContent(mystery) {
-    let announcementsContent = "<h4>Announcements</h4><ul>";
+function buildAnnouncementsContent(mystery, accordionClass) {
+    let announcementsListItems = "";
     mystery.announcements.forEach((announcement) => {
-        announcementsContent += `<li>${announcement}</li>`;
+        announcementsListItems += `<li>${announcement}</li>`;
     });
-    return announcementsContent + "</ul>";
+    const announcementsAccordion = `
+    <button class="accordion ${accordionClass}">Announcements</button>
+    <div class="panel">
+        <ul>
+            ${announcementsListItems}    
+        </ul>
+    </div>
+    `;
+    return announcementsAccordion;
 }
