@@ -3,6 +3,11 @@ const currentCollection = `/current`;
 const statsCollection = `/stats`;
 const currentAccordionClass = "current-accordion";
 const solvedAccordionClass = "solved-accordion";
+const occurrenceAccordion = "occurrence-accordion";
+const weaponSvg = "weapon";
+const victimSvg = "victim";
+const sceneSvg = "scene";
+const culpritSvg = "culprit";
 
 function loadMysteries() {
     loadCurrentMystery();
@@ -39,6 +44,7 @@ async function loadSolvedMysteries() {
 
 function displayStats(stats) {
     document.getElementById("mystery-stats").innerHTML = buildStatsContent(stats);
+    setupGraphs(stats);
 }
 
 function displayCurrentMystery(mystery) {
@@ -59,26 +65,63 @@ function displaySolvedMysteries(mysteries) {
     setupAccordions(solvedAccordionClass);
 }
 
+function setupGraphs(stats) {
+    setupAccordions(occurrenceAccordion);
+    setupClueOccurrenceGraph(culpritSvg, stats.culpritOccurrences, "Top Culprit Occurrences");
+    setupClueOccurrenceGraph(victimSvg, stats.victimOccurrences, "Top Victim Occurrences");
+    setupClueOccurrenceGraph(weaponSvg, stats.murderWeaponOccurrences, "Top Murder Weapon Occurrences");
+    setupClueOccurrenceGraph(sceneSvg, stats.crimeSceneOccurrences, "Top Crime Scene Occurrences");
+}
+
+function setupClueOccurrenceGraph(svgId, originalData, graphTitle) {
+    const yTitle = "# of Times Occurred";
+    const xTitle = capitalizeFirstLetter(svgId);
+    const data = [];
+    originalData.forEach((obj, index) => {
+        if (index < 5) {
+            const newData = {
+                item: obj.name,
+                value: obj.count,
+            };
+            data.push(newData);
+        }
+    })
+    setupGenericGraph(svgId, data, graphTitle, xTitle, yTitle);
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function buildStatsContent(stats) {
     const mysteryCountStats = `<p>${stats.solvedMysteryCount} mysteries solved</p>`;
     const availableSuspects = `<p>${stats.suspectCount} suspects available</p>`;
     const availableScenes = `<p>${stats.sceneCount} scenes available</p>`;
     const weaponsAvailable = `<p>${stats.weaponCount} weapons available</p>`;
-    const murderWeaponOccurrences = "<h4>Top Murder Weapon Occurrences</h4>" + buildOccurrencesContent(stats.murderWeaponOccurrences);
-    const crimeSceneOccurrences = "<h4>Top Crime Scene Occurrences</h4>" + buildOccurrencesContent(stats.crimeSceneOccurrences);
-    const culpritOccurrences = "<h4>Top Culprit Occurrences</h4>" + buildOccurrencesContent(stats.culpritOccurrences);
-    const victimOccurrences = "<h4>Top Victim Occurrences</h4>" + buildOccurrencesContent(stats.victimOccurrences);
-    return mysteryCountStats + availableSuspects + availableScenes + weaponsAvailable + murderWeaponOccurrences + crimeSceneOccurrences + culpritOccurrences + victimOccurrences;
+    const murderWeaponOccurrences = buildOccurrencesContent(stats.murderWeaponOccurrences, weaponSvg);
+    const crimeSceneOccurrences = buildOccurrencesContent(stats.crimeSceneOccurrences, sceneSvg);
+    const culpritOccurrences = buildOccurrencesContent(stats.culpritOccurrences, culpritSvg);
+    const victimOccurrences = buildOccurrencesContent(stats.victimOccurrences, victimSvg);
+    const basicStats = mysteryCountStats + availableSuspects + availableScenes + weaponsAvailable;
+    const advancedStats = murderWeaponOccurrences + crimeSceneOccurrences + culpritOccurrences + victimOccurrences;
+    return `
+    ${basicStats}
+    <button class="accordion ${occurrenceAccordion}">Advanced Statistics</button>
+    <div class="panel">
+            ${advancedStats}    
+    </div>
+    `;
 }
 
-function buildOccurrencesContent(occurrences) {
+function buildOccurrencesContent(occurrences, title) {
+    const svgForOccurrences = `<svg id="${title}" width="800" height="500"></svg>`;
     let occurrencesList = `<ol>`;
     occurrences.forEach((occurrence, index) => {
         if (index <= 4) {
             occurrencesList += `<li>${occurrence.name} (${occurrence.count})</li>`;
         }
     });
-    return occurrencesList + `</ol>`;
+    return `${svgForOccurrences}${occurrencesList}</ol>`;
 }
 
 function buildMysteryContentForMultiple(mysteries) {
@@ -135,7 +178,7 @@ function buildAnnouncementsContent(mystery, accordionClass) {
     mystery.announcements.forEach((announcement) => {
         announcementsListItems += `<li>${announcement}</li>`;
     });
-    const announcementsAccordion = `
+    return `
     <button class="accordion ${accordionClass}">Announcements</button>
     <div class="panel">
         <ul>
@@ -143,5 +186,4 @@ function buildAnnouncementsContent(mystery, accordionClass) {
         </ul>
     </div>
     `;
-    return announcementsAccordion;
 }
