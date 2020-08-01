@@ -229,7 +229,7 @@ function buildClueTable(tableName, choices, announcements) {
     <table>
   <tr>
     <th>${tableName}</th>
-    <th>Solution?</th>
+    <th>Eliminated</th>
     <th>Clue</th>
   </tr>
   ${choiceRows}
