@@ -192,10 +192,50 @@ function buildAnnouncementsContent(mystery, accordionClass) {
 }
 
 function buildClueTracker(mystery, accordionClass) {
+    const suspectTable = buildClueTable("Suspect", mystery.culpritOptions, mystery.announcements);
+    const weaponTable = buildClueTable("Weapon", mystery.weaponOptions, mystery.announcements);
+    const sceneTable = buildClueTable("Scene", mystery.sceneOptions, mystery.announcements);
     return `
     <button class="accordion ${accordionClass}">Clue Tracker</button>
     <div class="panel">
-        Clues!!!!
+        ${suspectTable}
+        ${weaponTable}
+        ${sceneTable}
     </div>
+    `;
+}
+
+function buildClueTable(tableName, choices, announcements) {
+    let choiceRows = ``;
+    choices.forEach((choice) => {
+        const row = buildClueRow(choice, announcements);
+        choiceRows += row;
+    });
+    return `
+<h3>${tableName} Clue Tracker</h3>
+    <table>
+  <tr>
+    <th>${tableName}</th>
+    <th>Solution?</th>
+    <th>Clue</th>
+  </tr>
+  ${choiceRows}
+</table>
+    `;
+}
+
+function buildClueRow(item, announcements) {
+    const relevantClue = announcements.find((clue) => {
+        return clue.includes("Clue #") && clue.includes(item);
+    });
+    const clueRevealed = relevantClue !== undefined;
+    const itemSymbol = clueRevealed ? "X" : "";
+    const itemClue = clueRevealed ? relevantClue : "";
+    return `
+      <tr>
+    <td>${item}</td>
+    <td>${itemSymbol}</td>
+    <td>${itemClue}</td>
+  </tr>
     `;
 }
