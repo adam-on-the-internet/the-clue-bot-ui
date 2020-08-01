@@ -48,6 +48,7 @@ function displayStats(stats) {
 }
 
 function displayCurrentMystery(mystery) {
+    console.log(mystery);
     document.getElementById("current-mystery").innerHTML = buildMysteryContent(mystery, currentAccordionClass);
     setupAccordions(currentAccordionClass);
 }
@@ -146,7 +147,6 @@ function buildMysteryContent(mystery, accordionClass) {
     ${dateContent}
     ${statusContent}
     ${announcementsContent}
-    <br>
     ${clueTrackerContent}
   `;
     } else {
@@ -192,17 +192,30 @@ function buildAnnouncementsContent(mystery, accordionClass) {
 }
 
 function buildClueTracker(mystery, accordionClass) {
-    const suspectTable = buildClueTable("Suspect", mystery.culpritOptions, mystery.announcements);
-    const weaponTable = buildClueTable("Weapon", mystery.weaponOptions, mystery.announcements);
-    const sceneTable = buildClueTable("Scene", mystery.sceneOptions, mystery.announcements);
-    return `
+    let tableContent = "";
+    if (mystery.culpritOptions !== undefined) {
+        const suspectTable = buildClueTable("Suspect", mystery.culpritOptions, mystery.announcements);
+        tableContent += suspectTable;
+    }
+    if (mystery.weaponOptions !== undefined) {
+        const weaponTable = buildClueTable("Weapon", mystery.weaponOptions, mystery.announcements);
+        tableContent += weaponTable;
+    }
+    if (mystery.sceneOptions !== undefined) {
+        const sceneTable = buildClueTable("Scene", mystery.sceneOptions, mystery.announcements);
+        tableContent += sceneTable;
+    }
+    if (tableContent !== "") {
+        return `
+    <br>
     <button class="accordion ${accordionClass}">Clue Tracker</button>
     <div class="panel">
-        ${suspectTable}
-        ${weaponTable}
-        ${sceneTable}
+        ${tableContent}
     </div>
     `;
+    } else {
+        return "";
+    }
 }
 
 function buildClueTable(tableName, choices, announcements) {
