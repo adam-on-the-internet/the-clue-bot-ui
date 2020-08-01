@@ -136,6 +136,7 @@ function buildMysteryContentForMultiple(mysteries) {
 function buildMysteryContent(mystery, accordionClass) {
     if (mystery) {
         const announcementsContent = buildAnnouncementsContent(mystery, accordionClass);
+        const clueTrackerContent = buildClueTracker(mystery, accordionClass);
         const statusContent = buildStatusContent(mystery);
         const dateContent = buildDateContent(mystery);
         return `
@@ -145,6 +146,8 @@ function buildMysteryContent(mystery, accordionClass) {
     ${dateContent}
     ${statusContent}
     ${announcementsContent}
+    <br>
+    ${clueTrackerContent}
   `;
     } else {
         return ``;
@@ -184,6 +187,15 @@ function buildAnnouncementsContent(mystery, accordionClass) {
         <ul>
             ${announcementsListItems}    
         </ul>
+    </div>
+    `;
+}
+
+function buildClueTracker(mystery, accordionClass) {
+    return `
+    <button class="accordion ${accordionClass}">Clue Tracker</button>
+    <div class="panel">
+        Clues!!!!
     </div>
     `;
 }
