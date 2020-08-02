@@ -1,4 +1,10 @@
-function setupAccordions(classname) {
+function setupAccordionClasses(classnames) {
+    classnames.forEach((classname) => {
+       setupAccordionClass(classname);
+    });
+}
+
+function setupAccordionClass(classname) {
     const acc = document.getElementsByClassName(classname);
     let i;
 
