@@ -18,8 +18,13 @@ function removeStatusFromAnnouncement(announcement) {
     return announcement.slice(0, statusStart);
 }
 
-function boldenItemInAnnouncement(announcement) {
-    return announcement;
+function boldenItemInAnnouncement(announcement, item) {
+    return announcement.replace(item, `<strong>${item}</strong>`);
+}
+
+function prepAnnouncementForClueTracker(announcement, item) {
+    announcement = boldenItemInAnnouncement(announcement, item);
+    return removeStatusFromAnnouncement(announcement);
 }
 
 // MYSTERY BASE
@@ -214,8 +219,7 @@ function buildClueTrackerRow(item, announcements) {
     let itemClue = "";
     if (clueRevealed) {
         itemSymbol = "X";
-        itemClue = boldenItemInAnnouncement(relevantClue, item);
-        itemClue = removeStatusFromAnnouncement(relevantClue);
+        itemClue = prepAnnouncementForClueTracker(relevantClue, item);
     }
     return `
       <tr>
