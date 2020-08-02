@@ -1,7 +1,12 @@
+/* https://www.w3schools.com/howto/howto_css_cards.asp */
+
 .card {
     /* Add shadows to create the "card" effect */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
+    padding-bottom: 10px;
+    border: #444444 solid 2px;
+    margin-bottom: 10px;
 }
 
 /* On mouse-over, add a deeper shadow */

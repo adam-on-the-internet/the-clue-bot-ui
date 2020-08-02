@@ -36,14 +36,16 @@ function buildMysteryContent(mystery) {
         const statusContent = buildStatusContent(mystery);
         const dateContent = buildMysteryDate(mystery);
         return `
-    <div id="mystery-${mystery._id}">
-        <h3>
-          ${mystery.title}
-        </h3>
-        ${dateContent}
-        ${statusContent}
-        ${announcementsContent}
-        ${clueTrackerContent}
+    <div id="mystery-${mystery._id}" class="card">
+        <div class="container">
+            <h3>
+              ${mystery.title}
+            </h3>
+            ${dateContent}
+            ${statusContent}
+            ${announcementsContent}
+            ${clueTrackerContent}
+        </div>
     </div>
   `;
     } else {
@@ -54,7 +56,7 @@ function buildMysteryContent(mystery) {
 function buildMysteryContentForMultiple(mysteries) {
     let mysteryContent = "";
     mysteries.forEach((mystery) => {
-        const mysteryContentWithBreak = buildMysteryContent(mystery) + "<hr>";
+        const mysteryContentWithBreak = buildMysteryContent(mystery);
         mysteryContent += mysteryContentWithBreak;
     });
     return mysteryContent;
@@ -120,11 +122,11 @@ function buildStatsContent(stats) {
     const basicStats = mysteryCountStats + availableSuspects + availableScenes + weaponsAvailable;
     const advancedStats = murderWeaponOccurrences + crimeSceneOccurrences + culpritOccurrences + victimOccurrences;
     return `
-    ${basicStats}
-    <button class="accordion occurrences">Advanced Statistics</button>
-    <div class="panel">
-            ${advancedStats}    
-    </div>
+        ${basicStats}
+        <button class="accordion occurrences">Advanced Statistics</button>
+        <div class="panel">
+                ${advancedStats}    
+        </div>
     `;
 }
 
