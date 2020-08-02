@@ -13,6 +13,15 @@ function buildMysteryAccordionClass(mystery) {
     return `mystery-accordion-${mystery._id}`;
 }
 
+function removeStatusFromAnnouncement(announcement) {
+    const statusStart = announcement.indexOf("(The");
+    return announcement.slice(0, statusStart);
+}
+
+function boldenItemInAnnouncement(announcement) {
+    return announcement;
+}
+
 // MYSTERY BASE
 
 function buildMysteryContent(mystery) {
@@ -71,7 +80,8 @@ function buildMysteryDate(mystery) {
 function buildMysteryAnnouncements(mystery) {
     let announcementsListItems = "";
     mystery.announcements.forEach((announcement) => {
-        const announcementItem = `<li>${announcement}</li>`;
+        const shortenedAnnouncement = removeStatusFromAnnouncement(announcement);
+        const announcementItem = `<li>${shortenedAnnouncement}</li>`;
         announcementsListItems += announcementItem;
     });
     return `
@@ -200,8 +210,13 @@ function buildClueTrackerRow(item, announcements) {
         return clue.includes("Clue #") && clue.includes(item);
     });
     const clueRevealed = relevantClue !== undefined;
-    const itemSymbol = clueRevealed ? "X" : "";
-    const itemClue = clueRevealed ? relevantClue : "";
+    let itemSymbol = "";
+    let itemClue = "";
+    if (clueRevealed) {
+        itemSymbol = "X";
+        itemClue = boldenItemInAnnouncement(relevantClue, item);
+        itemClue = removeStatusFromAnnouncement(relevantClue);
+    }
     return `
       <tr>
     <td>${item}</td>
