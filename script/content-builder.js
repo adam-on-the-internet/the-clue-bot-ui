@@ -41,6 +41,7 @@ function buildMysteryContent(mystery) {
             <h3>
               ${mystery.title}
             </h3>
+            <hr>
             ${dateContent}
             ${statusContent}
             ${announcementsContent}
@@ -138,7 +139,7 @@ function buildOccurrencesContent(occurrences, title) {
             occurrencesList += `<li>${occurrence.name} (${occurrence.count})</li>`;
         }
     });
-    return `${svgForOccurrences}${occurrencesList}</ol>`;
+    return `${svgForOccurrences}${occurrencesList}</ol><hr>`;
 }
 
 function setupGraphs(stats) {
